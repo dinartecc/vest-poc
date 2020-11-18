@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { Box } from "theme-ui";
+import Tab from "./components/Tab";
 
-function App() {
+const App = () => {
+  const [tab, setTab] = useState("userTab");
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Box
+      __css={{
+        background:
+          "linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)",
+        width: "100%",
+        minHeight: "100vh",
+        p: "20px"
+      }}
+    >
+      <Box
+        __css={{
+          bg: "white",
+          borderRadius: "20px",
+          maxWidth: 800,
+          p: "20px",
+          width: "80%",
+          my: "30px",
+          mx: "auto",
+          display: "flex"
+        }}
+      >
+        <Box
+          __css={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%"
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Tab currentTab={tab} changeHandler={setTab} tabName="userTab">
+            User
+          </Tab>
+          <Tab currentTab={tab} changeHandler={setTab} tabName="additionalTab">
+            Additional Information
+          </Tab>
+        </Box>
+        <Box
+          __css={{
+            display: "flex",
+            flexDirection: "column"
+          }}
+        >
+          {tab === "userTab" && <></>}
+          {tab === "additionalTab" && <></>}
+        </Box>
+      </Box>
+    </Box>
   );
-}
+};
 
 export default App;
