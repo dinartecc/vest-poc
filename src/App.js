@@ -10,13 +10,16 @@ const App = () => {
   const [tab, setTab] = useState("userTab");
   const [formData, setFormData] = useState({});
   const [result, setResult] = useState(vest.get("myform"));
+  const [loadingMachine, setLoadingMachine] = useState(false);
 
   const handleValidation = ({ name, value, tab }) => {
     const res = validate({ ...formData, [name]: value }, { field: name, tab });
     setResult(res);
 
     if (name === "machineName") {
+      setLoadingMachine(true);
       res.done((result) => {
+        setLoadingMachine(false);
         setResult(result);
       });
     }
@@ -32,10 +35,19 @@ const App = () => {
   };
 
   const calculateMachineName = (e) => {
-    console.log("xd");
-    if (!formData.machineName) {
+    if (!formData.machineName && e.target.value !== "") {
       validateChange("machineName", `field_${_.snakeCase(e.target.value)}`);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const res = validate(formData, {});
+    res.done((result) =>
+      result.hasErrors()
+        ? setResult(result)
+        : console.log("Submitted", formData)
+    );
   };
 
   return (
@@ -88,6 +100,7 @@ const App = () => {
           __css={{
             display: "flex",
             flexDirection: "column",
+            height: "280px",
           }}
         >
           {tab === "userTab" && (
@@ -138,9 +151,37 @@ const App = () => {
                 name="machineName"
                 label="Machine Name"
                 onChange={validateChange}
+                sx={{
+                  "& input": {
+                    backgroundImage: loadingMachine
+                      ? "url('https://powerusers.microsoft.com/t5/image/serverpage/image-id/118082i204C32E01666789C')"
+                      : "",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "45px 45px",
+                    backgroundPosition: "right",
+                  },
+                }}
               />
             </>
           )}
+        </Box>
+        <Box __css={{ textAlign: "right", mt: "10px" }}>
+          <Box
+            as="button"
+            onClick={handleSubmit}
+            __css={{
+              bg: result.hasErrors() ? "error" : "valid",
+              fontSize: "2xl",
+              border: "0",
+              borderRadius: "5px",
+              px: "10px",
+              py: "5px",
+              color: "white",
+              cursor: result.hasErrors() ? "not-allowed" : "pointer",
+            }}
+          >
+            Submit
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -38,8 +38,8 @@ const val = vest.create("myform", (data, { field, tab }) => {
       enforce(data.password).isNotEmpty();
     });
 
-    test("password", "Must be 8 characters or longer", () => {
-      enforce(data.password).longerThanOrEquals(8);
+    test("password", "Must be 6 characters or longer", () => {
+      enforce(data.password).longerThanOrEquals(6);
     });
 
     test("password", "Should contain at least 1 number", () => {

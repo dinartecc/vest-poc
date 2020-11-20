@@ -1,4 +1,5 @@
 import { Box } from "theme-ui";
+import { has } from "lodash";
 
 const Input = ({
   label,
@@ -11,24 +12,43 @@ const Input = ({
   result,
   ...props
 }) => {
-  const errorMessages = tab
-    ? result.getErrors(name)
-    : result.getErrorsByGroup(tab, name);
+  const errorMessages = result.getErrors(name);
+  const warningMessages = result.getWarnings(name);
 
   const hasError = errorMessages.length > 0;
+  const hasWarnings = warningMessages.length > 0;
 
   return (
-    <Box as="label" {...props}>
+    <Box as="label" __css={{ mt: "15px" }} {...props}>
       <Box __css={{ display: "flex", justifyContent: "space-between" }}>
         {label}
-        {hasError && <span>{errorMessages[0]}</span>}
+        {hasError && (
+          <Box as="span" __css={{ color: "error" }}>
+            {errorMessages[0]}
+          </Box>
+        )}
+        {!hasError && hasWarnings && (
+          <Box as="span" __css={{ color: "warning" }}>
+            {warningMessages[0]}
+          </Box>
+        )}
       </Box>
       <Box
         as="input"
         type={type}
         name={name}
         value={value}
-        __css={{ width: "100%" }}
+        __css={{
+          width: "100%",
+          lineHeight: "2",
+          fontSize: "base",
+          px: "10px",
+          borderRadius: "5px",
+          border: "1px solid",
+          bg: "#f1f2f3",
+          borderColor: hasError ? "error" : hasWarnings ? "warning" : "",
+          color: hasError ? "error" : hasWarnings ? "warning" : "",
+        }}
         onChange={(e) => {
           const {
             target: { name, value },
