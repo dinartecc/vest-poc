@@ -1,15 +1,13 @@
 import vest, { test, enforce, group } from "vest";
 
-let timer;
-
 const machineNameCheck = (machineName) => {
   const names = ["field_hello", "field_vest", "field_bye"];
-  clearTimeout(timer);
+
   return new Promise((resolve, reject) => {
-    timer = setTimeout(() => {
+    setTimeout(() => {
       console.log("Api Call");
       names.includes(machineName) ? reject() : resolve();
-    }, 1500);
+    }, 1000);
   });
 };
 

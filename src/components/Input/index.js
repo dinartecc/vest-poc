@@ -1,5 +1,4 @@
 import { Box } from "theme-ui";
-import { has } from "lodash";
 
 const Input = ({
   label,
@@ -10,8 +9,10 @@ const Input = ({
   onBlur,
   onChange,
   result,
+  hasTimeout,
   ...props
 }) => {
+  // get Errors & Warnings
   const errorMessages = result.getErrors(name);
   const warningMessages = result.getWarnings(name);
 
@@ -35,6 +36,7 @@ const Input = ({
       </Box>
       <Box
         as="input"
+        autoComplete="off"
         type={type}
         name={name}
         value={value}
@@ -46,7 +48,7 @@ const Input = ({
           borderRadius: "5px",
           border: "1px solid",
           bg: "#f1f2f3",
-          borderColor: hasError ? "error" : hasWarnings ? "warning" : "",
+          borderColor: hasError ? "error" : hasWarnings ? "warning" : "#cccccc",
           color: hasError ? "error" : hasWarnings ? "warning" : "",
         }}
         onChange={(e) => {

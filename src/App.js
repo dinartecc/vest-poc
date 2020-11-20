@@ -6,6 +6,8 @@ import Input from "./components/Input";
 import validate from "./validate";
 import _ from "lodash";
 
+let timer;
+
 const App = () => {
   const [tab, setTab] = useState("userTab");
   const [formData, setFormData] = useState({});
@@ -34,6 +36,12 @@ const App = () => {
     handleValidation({ name, value });
   };
 
+  const validateChangeTimeout = (name, value) => {
+    handleChange(name, value);
+    clearTimeout(timer);
+    timer = setTimeout(() => handleValidation({ name, value }), 1000);
+  };
+
   const calculateMachineName = (e) => {
     if (!formData.machineName && e.target.value !== "") {
       validateChange("machineName", `field_${_.snakeCase(e.target.value)}`);
@@ -50,26 +58,30 @@ const App = () => {
     );
   };
 
+  console.log(result);
+
   return (
     <Box
       __css={{
-        background:
-          "linear-gradient(90deg, rgba(158,115,187,1) 0%, rgba(255,133,133,1) 50%, rgba(255,199,121,1) 100%)",
+        background: "linear-gradient(to right, #c33764, #1d2671)",
         width: "100%",
         minHeight: "100vh",
         p: "20px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Box
         as="form"
-        autocomplete="off"
         __css={{
+          boxShadow: "0px 0px 20px -10px rgba(255,255,255,1)",
+          mb: "20px",
+          width: "50%",
           bg: "white",
           borderRadius: "20px",
           maxWidth: 800,
           p: "40px",
-          my: "30px",
-          mx: "auto",
         }}
       >
         <Box
@@ -114,7 +126,6 @@ const App = () => {
                 onChange={validateChange}
               />
               <Input
-                type="password"
                 result={result}
                 value={formData.password}
                 tab="userTab"
@@ -123,7 +134,6 @@ const App = () => {
                 onChange={validateChange}
               />
               <Input
-                type="password"
                 result={result}
                 value={formData.confirmPassword}
                 tab="userTab"
@@ -150,7 +160,7 @@ const App = () => {
                 tab="additionalTab"
                 name="machineName"
                 label="Machine Name"
-                onChange={validateChange}
+                onChange={validateChangeTimeout}
                 sx={{
                   "& input": {
                     backgroundImage: loadingMachine

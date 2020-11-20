@@ -1,6 +1,7 @@
 import { Box } from "theme-ui";
 
 const Tab = ({ children, currentTab, changeHandler, result, tabName }) => {
+  // get errors for the whole group
   const isActive = currentTab === tabName;
   const tabErrorCount = Object.keys(result.getErrorsByGroup(tabName)).length;
 
